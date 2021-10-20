@@ -2,7 +2,7 @@
 <module>
 	<name>bulkeditor</name>
 	<displayName><![CDATA[Bulk Editor]]></displayName>
-	<version><![CDATA[1.1.0]]></version>
+	<version><![CDATA[1.2.0]]></version>
 	<description><![CDATA[Edit your products in bulk]]></description>
 	<author><![CDATA[Kelostrada]]></author>
 	<tab><![CDATA[administration]]></tab>
