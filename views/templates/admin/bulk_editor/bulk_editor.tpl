@@ -6,7 +6,7 @@
     <div class="panel-body" id="bulk-editor">
 
         <div class="container">
-            <form class="form" role="form" id="bulk-editor-categories" type="GET">
+            <form class="form form-inline" role="form" id="bulk-editor-categories" type="GET">
                 <input type="hidden" name="controller" value="AdminBulkEditor" />
                 <input type="hidden" name="token" value="{Tools::getAdminTokenLite('AdminBulkEditor')}" />
 
@@ -16,6 +16,16 @@
                     <option value="{$category.id}" {if $category.id == $categoryID}selected{/if}>{$category.name}</option>
                     {/foreach}
                 </select>
+
+                <hr/>
+
+                {foreach from=$features item=feature}
+                <select class="form-control" id="bulk-editor-feature-{$feature.name}" name="features[{$feature.id_feature}][]" multiple>
+                    {foreach from=$feature.values item=value}
+                    <option value="{$value.id_feature_value}" {if $value.selected}selected{/if}>{$value.value}</option>
+                    {/foreach}
+                </select>
+                {/foreach}
             </form>
         </div>
 
@@ -30,14 +40,19 @@
                         <th>Reference</th>
                         <th>Price</th>
                         <th>Quantity</th>
+                        <th>Features</th>
                         <th>Active</th>
                     </tr>
                 </thead>
                 <tbody>
                     {foreach from=$products item=product}
                     <tr>
-                        <td><img height="50" src="{$link->getImageLink($product.link_rewrite, $product.cover, '')}"></td>
-                        <td>{$product["name"]}</td>
+                        <td><img height="60" src="{$link->getImageLink($product.link_rewrite, $product.cover, '')}"></td>
+                        <td>
+                            <a target="_blank" href="{Context::getContext()->link->getAdminLink('AdminProducts', true, ['id_product' => $product.id_product])}">
+                                {$product["name"]}
+                            </a>
+                        </td>
                         <td>{$product["reference"]}</td>
                         <td>
                             <input type="text" class="form-control update-price" placeholder="Enter price" 
@@ -48,11 +63,18 @@
                                     value="{$product.quantity}" data-id="{$product.id_product}">
                         </td>
                         <td>
-                        {if $product.active}
-                        <i class="material-icons action-enabled">check</i>
-                        {else}
-                        <i class="material-icons action-disabled">clear</i>
-                        {/if}
+                            <ul>
+                                {foreach from=$product.features item=feature}
+                                <li>{$feature.name}: {$feature.value}</li>
+                                {/foreach}
+                            </ul>
+                        </td>
+                        <td>
+                            {if $product.active}
+                            <i class="material-icons action-enabled">check</i>
+                            {else}
+                            <i class="material-icons action-disabled">clear</i>
+                            {/if}
                         </td>
                     </tr>
                     {/foreach}

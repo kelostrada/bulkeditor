@@ -3,6 +3,7 @@
 class AdminBulkEditorController extends ModuleAdminController 
 {
     protected $categoryID = false;
+    protected $selectedFeatures = false;
 
     public function __construct() 
     {
@@ -14,13 +15,23 @@ class AdminBulkEditorController extends ModuleAdminController
         parent::init();
         $this->bootstrap = true;
         $this->categoryID = Tools::getValue("category_id");
+        $this->selectedFeatures = Tools::getValue("features");
     }
 
     public function initContent()
     {
+        $features = $this->getFeatures();
+        $products = $this->getProducts();
+        if ($this->selectedFeatures)
+        {
+            $products = $this->filterProducts($products, $features);
+        }
+        $categories = $this->getCategories();
+
         $assigns = array(
-            'products' => $this->getProducts(),
-            'categories' => $this->getCategories(),
+            'products' => $products,
+            'categories' => $categories,
+            'features' => $features,
             'categoryID' => $this->categoryID
         );
 
@@ -80,6 +91,35 @@ class AdminBulkEditorController extends ModuleAdminController
         return $products;
     }
 
+    protected function getFeatures()
+    {
+        $features = [];
+        $products = $this->getProducts();
+
+        foreach($products as $product)
+        {
+            $productFeatures = Product::getFeaturesStatic($product["id_product"]);
+
+            foreach($productFeatures as $productFeature)
+            {
+                $features[$productFeature["id_feature"]] = null;
+            }
+        }
+
+        foreach($features as $id => &$feature)
+        {
+            $feature = Feature::getFeature($this->context->language->id, $id);
+            $feature["values"] = FeatureValue::getFeatureValuesWithLang($this->context->language->id, $id);
+
+            foreach($feature["values"] as &$value)
+            {
+                $value["selected"] = !!in_array($value["id_feature_value"], $this->selectedFeatures[$id]);
+            }
+        }
+
+        return $features;
+    }
+
     protected function getCategories()
     {
         $categories = Category::getCategories( (int)($this->context->language->id), true, false );
@@ -89,6 +129,28 @@ class AdminBulkEditorController extends ModuleAdminController
         }, $categories);
 
         return $categories;
+    }
+
+    private function filterProducts($products, $features)
+    {
+        return array_filter($products, function($product) use ($features) {
+            foreach($features as $feature)
+            {
+                foreach($feature["values"] as $value)
+                {
+                    if (!$value["selected"]) continue;
+
+                    foreach($product["features"] as $product_feature)
+                    {
+                        if ($product_feature["name"] == $feature["name"] && $product_feature["value"] == $value["value"])
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        });
     }
     
 }
