@@ -27,6 +27,8 @@
 */
 
 $(document).ready(() => {
+    $('#bulk-editor-products').DataTable({paging: false});
+
     $('#bulk-editor-categories').on('change', () => {
         $('#bulk-editor-categories').submit();
     });

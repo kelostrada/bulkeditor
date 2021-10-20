@@ -23,40 +23,40 @@
 
         <div>
             <table class="table" id="bulk-editor-products" data-link="{$link->getAdminLink( 'AdminBulkEditor' )}">
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Reference</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Active</th>
-                </tr>
-                {foreach from=$products item=product}
-                <tr>
-                    <td><img height="50" src="{$link->getImageLink($product.link_rewrite, $product.cover, '')}"></td>
-                    <td>{$product["name"]}</td>
-                    <td>{$product["reference"]}</td>
-                    <td>
-                        <input type="text" class="form-control update-price" placeholder="Enter price" 
-                                value="{$product.price}" data-id="{$product.id_product}">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control update-quantity" placeholder="Enter quantity" 
-                                value="{$product.quantity}" data-id="{$product.id_product}">
-                    </td>
-                    <td>
-                    {if $product.active}
-                    <i class="material-icons action-enabled">check</i>
-                    {else}
-                    <i class="material-icons action-disabled">clear</i>
-                    {/if}
-                    </td>
-                </tr>
-                {/foreach}
-
-                {if $products|@count == 0}
-                <tr><td colspan="10"><p class="text-center">no products</p></td></tr>
-                {/if}
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Reference</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$products item=product}
+                    <tr>
+                        <td><img height="50" src="{$link->getImageLink($product.link_rewrite, $product.cover, '')}"></td>
+                        <td>{$product["name"]}</td>
+                        <td>{$product["reference"]}</td>
+                        <td>
+                            <input type="text" class="form-control update-price" placeholder="Enter price" 
+                                    value="{$product.price}" data-id="{$product.id_product}">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control update-quantity" placeholder="Enter quantity" 
+                                    value="{$product.quantity}" data-id="{$product.id_product}">
+                        </td>
+                        <td>
+                        {if $product.active}
+                        <i class="material-icons action-enabled">check</i>
+                        {else}
+                        <i class="material-icons action-disabled">clear</i>
+                        {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
             </table>
         </div>
     </div>
