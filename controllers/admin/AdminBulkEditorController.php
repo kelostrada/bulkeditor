@@ -134,8 +134,17 @@ class AdminBulkEditorController extends ModuleAdminController
     private function filterProducts($products, $features)
     {
         return array_filter($products, function($product) use ($features) {
+            $passingFeatures = [];
+
             foreach($features as $feature)
             {
+                // check if the values were even selected
+                $passingFeatures[$feature["id_feature"]] = array_reduce($feature["values"], function($acc, $value) {
+                    return $acc && !$value["selected"];
+                }, true);
+
+                if ($passingFeatures[$feature["id_feature"]]) continue;
+
                 foreach($feature["values"] as $value)
                 {
                     if (!$value["selected"]) continue;
@@ -144,12 +153,16 @@ class AdminBulkEditorController extends ModuleAdminController
                     {
                         if ($product_feature["name"] == $feature["name"] && $product_feature["value"] == $value["value"])
                         {
-                            return true;
+                            $passingFeatures[$feature["id_feature"]] = true;
+                            continue;
                         }
                     }
                 }
             }
-            return false;
+
+            return array_reduce($passingFeatures, function($acc, $pass) {
+                return $acc && $pass;
+            }, true);
         });
     }
     
