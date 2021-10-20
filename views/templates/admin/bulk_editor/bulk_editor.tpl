@@ -47,7 +47,7 @@
                 <tbody>
                     {foreach from=$products item=product}
                     <tr>
-                        <td><img height="60" src="{$link->getImageLink($product.link_rewrite, $product.cover, '')}"></td>
+                        <td><img height="80" src="{$link->getImageLink($product.link_rewrite, $product.cover, '')}"></td>
                         <td>
                             <a target="_blank" href="{Context::getContext()->link->getAdminLink('AdminProducts', true, ['id_product' => $product.id_product])}">
                                 {$product["name"]}
