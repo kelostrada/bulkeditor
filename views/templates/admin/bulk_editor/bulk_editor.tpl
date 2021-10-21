@@ -76,11 +76,13 @@
                             </ul>
                         </td>
                         <td>
-                            {if $product.active}
-                            <i class="material-icons action-enabled">check</i>
-                            {else}
-                            <i class="material-icons action-disabled">clear</i>
-                            {/if}
+                            <span class="toggle-active" data-id="{$product.id_product}">
+                                {if $product.active}
+                                <i class="material-icons">check</i>
+                                {else}
+                                <i class="material-icons">clear</i>
+                                {/if}
+                            </span>
                         </td>
                     </tr>
                     {/foreach}

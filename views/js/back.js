@@ -93,4 +93,46 @@ $(document).ready(() => {
     $('#bulk-editor-products').on('blur', '.update-quantity', (event) => {
         updateValues(event, 'SaveQuantity');
     });
+
+    $('#bulk-editor-products').on('click', '.toggle-active', (event) => {
+        const id = $(event.currentTarget).data('id');
+        const link = $(event.delegateTarget).data('link');
+        const icon = $(event.currentTarget).children("i");
+        
+        icon.text("refresh");
+        icon.addClass("spinner");
+
+        $.ajax({
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            url: link,
+            timeout: 30000,
+            data: {
+                ajax: true,
+                controller: 'AdminBulkEditor',
+                action: 'ToggleActive',
+                id: id
+            },
+            success: function (data) {
+                icon.removeClass("spinner");
+
+                if (data.result == "success") {
+                    if (data.active)
+                    {
+                        icon.text("check");
+                    }
+                    else
+                    {
+                        icon.text("clear");
+                    }
+                } else {
+                    console.error("error while saving: ", data);
+                }
+            },
+            error: function(data) {
+                console.error("error while saving: ", data);
+            }
+        });
+    });
 });

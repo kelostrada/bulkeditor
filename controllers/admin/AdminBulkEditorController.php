@@ -76,6 +76,22 @@ class AdminBulkEditorController extends ModuleAdminController
         }
     }
 
+    public function ajaxProcessToggleActive()
+    {
+        $id = Tools::getValue("id");
+        $product = new Product((int)$id, false, $this->context->language->id);
+        $product->active = !$product->active;
+
+        if ($product->save())
+        {
+            echo json_encode(array('result' => 'success', 'active' => $product->active));
+        }
+        else
+        {
+            echo json_encode(array('result' => 'error'));
+        }
+    }
+
     protected function getProducts()
     {
         $category = new Category($this->categoryID, $this->context->language->id);
