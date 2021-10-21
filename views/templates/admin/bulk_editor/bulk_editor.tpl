@@ -55,12 +55,18 @@
                         </td>
                         <td>{$product["reference"]}</td>
                         <td>
-                            <input type="text" class="form-control update-price" placeholder="Enter price" 
-                                    value="{$product.price}" data-id="{$product.id_product}">
+                            <div class="form-group has-feedback">
+                                <input type="text" class="form-control update-price" placeholder="Enter price" 
+                                        value="{$product.price}" data-id="{$product.id_product}" size="5">
+                                <span class="glyphicon form-control-feedback"></span>
+                            </div>
                         </td>
                         <td>
-                            <input type="text" class="form-control update-quantity" placeholder="Enter quantity" 
-                                    value="{$product.quantity}" data-id="{$product.id_product}">
+                            <div class="form-group has-feedback">
+                                <input type="text" class="form-control update-quantity" placeholder="Enter quantity" 
+                                        value="{$product.quantity}" data-id="{$product.id_product}" size="5">
+                                <span class="glyphicon form-control-feedback"></span>
+                            </div>
                         </td>
                         <td>
                             <ul>

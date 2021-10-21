@@ -26,6 +26,59 @@
 * to avoid any conflicts with others containers.
 */
 
+function updateValues(event, action) {
+    const id = $(event.target).data('id');
+    const value = $(event.target).val();
+    const link = $(event.delegateTarget).data('link');
+    const $formGroup = $(event.target).parent('.form-group');
+    const $glyphicon = $(event.target).siblings('.glyphicon');
+
+    $formGroup.addClass("has-warning");
+    $glyphicon.addClass("glyphicon-refresh spinner");
+
+    setTimeout(function() {
+        $formGroup.removeClass("has-success has-warning has-error");
+        $glyphicon.removeClass("glyphicon-ok glyphicon-remove glyphicon-refresh spinner");
+    }, 5000);
+
+    $.ajax({
+        type: 'POST',
+        cache: false,
+        dataType: 'json',
+        url: link,
+        timeout: 3000,
+        data: {
+            ajax: true,
+            controller: 'AdminBulkEditor',
+            action: action,
+            id: id,
+            value: value
+        },
+        success: function (data) {
+            $formGroup.removeClass("has-warning");
+            $glyphicon.removeClass("glyphicon-refresh spinner");
+
+            if (data.result == "success") {
+                $formGroup.addClass("has-success");
+                $glyphicon.addClass("glyphicon-ok");
+            } else {
+                console.error("error while saving: ", data);
+
+                $formGroup.addClass("has-error");
+                $glyphicon.addClass("glyphicon-remove");
+            }
+        },
+        error: function(data) {
+            console.error("error while saving: ", data);
+
+            $formGroup.removeClass("has-warning");
+            $glyphicon.removeClass("glyphicon-refresh spinner");
+            $formGroup.addClass("has-error");
+            $glyphicon.addClass("glyphicon-remove");
+        }
+    });
+}
+
 $(document).ready(() => {
     $('#bulk-editor-products').DataTable({paging: false});
 
@@ -33,52 +86,11 @@ $(document).ready(() => {
         $('#bulk-editor-categories').submit();
     });
 
-    $('#bulk-editor-products').on('blur', '.update-price', (e) => {
-        const id = $(e.target).data('id');
-        const value = $(e.target).val();
-        const link = $(e.delegateTarget).data('link');
-        console.log(id, value, link);
-
-        $.ajax({
-            type: 'POST',
-            cache: false,
-            dataType: 'json',
-            url: link,
-            data: {
-                ajax: true,
-                controller: 'AdminBulkEditor',
-                action: 'SavePrice',
-                id: id,
-                price: value
-            },
-            success: function (data) {
-                console.log("success", data);
-            }
-        });
+    $('#bulk-editor-products').on('blur', '.update-price', (event) => {
+        updateValues(event, 'SavePrice');
     });
 
-    $('#bulk-editor-products').on('blur', '.update-quantity', (e) => {
-        const id = $(e.target).data('id');
-        const value = $(e.target).val();
-        const link = $(e.delegateTarget).data('link');
-        console.log(id, value, link);
-
-        $.ajax({
-            type: 'POST',
-            cache: false,
-            dataType: 'json',
-            url: link,
-            data: {
-                ajax: true,
-                controller: 'AdminBulkEditor',
-                action: 'SaveQuantity',
-                id: id,
-                quantity: value
-            },
-            success: function (data) {
-                console.log("success", data);
-            }
-        });
+    $('#bulk-editor-products').on('blur', '.update-quantity', (event) => {
+        updateValues(event, 'SaveQuantity');
     });
 });
-

@@ -43,7 +43,7 @@ class AdminBulkEditorController extends ModuleAdminController
     public function ajaxProcessSaveQuantity()
     {
         $id = Tools::getValue("id");
-        $quantity = Tools::getValue("quantity");
+        $quantity = Tools::getValue("value");
 
         $product = new Product((int)$id, false, $this->context->language->id);
         $product->quantity = (int)$quantity;
@@ -60,7 +60,7 @@ class AdminBulkEditorController extends ModuleAdminController
     public function ajaxProcessSavePrice()
     {
         $id = Tools::getValue("id");
-        $price = Tools::getValue("price");
+        $price = Tools::getValue("value");
 
         $product = new Product((int)$id, false, $this->context->language->id);
         $tax = 1 + $product->getTaxesRate() / 100.0;
