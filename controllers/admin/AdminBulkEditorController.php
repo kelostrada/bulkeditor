@@ -40,6 +40,23 @@ class AdminBulkEditorController extends ModuleAdminController
         $this->setTemplate('bulk_editor.tpl');
     }
 
+    public function ajaxProcessSaveReference()
+    {
+        $id = Tools::getValue("id");
+        $reference = Tools::getValue("value");
+
+        $product = new Product((int)$id, false, $this->context->language->id);
+        $product->reference = $reference;
+        if ($product->save()) 
+        {
+            echo json_encode(array('result' => 'success'));
+        }
+        else
+        {
+            echo json_encode(array('result' => 'error'));
+        }
+    }
+
     public function ajaxProcessSaveQuantity()
     {
         $id = Tools::getValue("id");
@@ -47,7 +64,8 @@ class AdminBulkEditorController extends ModuleAdminController
 
         $product = new Product((int)$id, false, $this->context->language->id);
         $product->quantity = (int)$quantity;
-        if ($product->save()) {
+        if ($product->save()) 
+        {
             StockAvailable::setQuantity((int)$product->id, 0, $product->quantity, $this->context->shop->id);
             echo json_encode(array('result' => 'success'));
         }

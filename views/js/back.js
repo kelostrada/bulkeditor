@@ -86,6 +86,10 @@ $(document).ready(() => {
         $('#bulk-editor-categories').submit();
     });
 
+    $('#bulk-editor-products').on('blur', '.update-reference', (event) => {
+        updateValues(event, 'SaveReference');
+    });
+
     $('#bulk-editor-products').on('blur', '.update-price', (event) => {
         updateValues(event, 'SavePrice');
     });
