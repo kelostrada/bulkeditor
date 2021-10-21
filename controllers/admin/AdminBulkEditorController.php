@@ -98,21 +98,23 @@ class AdminBulkEditorController extends ModuleAdminController
 
         foreach($products as $product)
         {
-            $productFeatures = Product::getFeaturesStatic($product["id_product"]);
-
-            foreach($productFeatures as $productFeature)
+            foreach($product["features"] as $productFeature)
             {
-                $features[$productFeature["id_feature"]] = null;
+                if (!$features[$productFeature["id_feature"]]) $features[$productFeature["id_feature"]] = [];
+                $features[$productFeature["id_feature"]]["id_feature"] = $productFeature["id_feature"];
+                $features[$productFeature["id_feature"]]["name"] = $productFeature["name"];
+                $features[$productFeature["id_feature"]]["values"][$productFeature["value"]] = ["value" => $productFeature["value"]];
             }
         }
 
         foreach($features as $id => &$feature)
         {
-            $feature = Feature::getFeature($this->context->language->id, $id);
-            $feature["values"] = FeatureValue::getFeatureValuesWithLang($this->context->language->id, $id);
+            $values = FeatureValue::getFeatureValuesWithLang($this->context->language->id, $id);
 
             foreach($feature["values"] as &$value)
             {
+                $value_key = array_search($value["value"], array_column($values, "value"));
+                $value["id_feature_value"] = $values[$value_key]["id_feature_value"];
                 $value["selected"] = !!in_array($value["id_feature_value"], $this->selectedFeatures[$id]);
             }
         }
