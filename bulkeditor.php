@@ -36,7 +36,7 @@ class Bulkeditor extends Module
     {
         $this->name = 'bulkeditor';
         $this->tab = 'administration';
-        $this->version = '1.3.0';
+        $this->version = '1.3.1';
         $this->author = 'Kelostrada';
         $this->need_instance = 0;
 
