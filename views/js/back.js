@@ -36,17 +36,12 @@ function updateValues(event, action) {
     $formGroup.addClass("has-warning");
     $glyphicon.addClass("glyphicon-refresh spinner");
 
-    setTimeout(function() {
-        $formGroup.removeClass("has-success has-warning has-error");
-        $glyphicon.removeClass("glyphicon-ok glyphicon-remove glyphicon-refresh spinner");
-    }, 5000);
-
     $.ajax({
         type: 'POST',
         cache: false,
         dataType: 'json',
         url: link,
-        timeout: 3000,
+        timeout: 30000,
         data: {
             ajax: true,
             controller: 'AdminBulkEditor',
@@ -61,6 +56,11 @@ function updateValues(event, action) {
             if (data.result == "success") {
                 $formGroup.addClass("has-success");
                 $glyphicon.addClass("glyphicon-ok");
+
+                setTimeout(function() {
+                    $formGroup.removeClass("has-success");
+                    $glyphicon.removeClass("glyphicon-ok");
+                }, 5000);
             } else {
                 console.error("error while saving: ", data);
 
