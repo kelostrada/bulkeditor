@@ -54,11 +54,7 @@
                             </a>
                         </td>
                         <td>
-                            <div class="form-group has-feedback">
-                                <input type="text" class="form-control update-reference" placeholder="Enter reference" 
-                                        value="{$product.reference}" data-id="{$product.id_product}" size="20">
-                                <span class="glyphicon form-control-feedback"></span>
-                            </div>
+                            <span>{$product.reference}</span>
                         </td>
                         <td>
                             <div class="form-group has-feedback">
