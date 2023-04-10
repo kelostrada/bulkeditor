@@ -113,13 +113,13 @@ class AdminBulkEditorController extends ModuleAdminController
     protected function getProducts()
     {
         $category = new Category($this->categoryID, $this->context->language->id);
-        $products = $category->getProducts($this->context->language->id, 0, 10000, null, null, false, false);
+        $products = $category->getProducts($this->context->language->id, 0, 10000, null, null, false, false, false, 1, false);
 
         if (!$products) return [];
 
         foreach($products as &$product) {
             $images = Product::getCover($product["id_product"]);
-            $product["cover"] = $images["id_image"];
+            $product["cover"] = $images ? $images["id_image"] : null;
         }
 
         return $products;
